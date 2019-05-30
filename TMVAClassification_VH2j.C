@@ -12,6 +12,7 @@
 
 #include "TChain.h"
 #include "TFile.h"
+#include "TLorentzVector.h"
 #include "TObjString.h"
 #include "TPluginManager.h"
 #include "TROOT.h"
@@ -23,6 +24,22 @@
 #include "TMVA/Factory.h"
 #include "TMVA/TMVAGui.h"
 #include "TMVA/Tools.h"
+
+
+float detajjl(float jet1_pt, float jet1_eta, float jet1_phi,
+	      float jet2_pt, float jet2_eta, float jet2_phi,
+	      float lep1_pt, float lep1_eta, float lep1_phi)
+{
+  TLorentzVector jet1_tlv;
+  TLorentzVector jet2_tlv;
+  TLorentzVector lep1_tlv;
+
+  jet1_tlv.SetPtEtaPhiM(jet1_pt, jet1_eta, jet1_phi, 0.);
+  jet2_tlv.SetPtEtaPhiM(jet2_pt, jet2_eta, jet2_phi, 0.);
+  lep1_tlv.SetPtEtaPhiM(lep1_pt, lep1_eta, lep1_phi, 0.);
+
+  return fabs((jet1_tlv + jet2_tlv).Eta() - lep1_tlv.Eta());
+}
 
 
 void TMVAClassification_VH2j(TString myMethodList = "") 
@@ -84,9 +101,11 @@ void TMVAClassification_VH2j(TString myMethodList = "")
 
   dataloader->AddVariable("mll",          'F');
   dataloader->AddVariable("mjj",          'F');
+  dataloader->AddVariable("mth",          'F');
   dataloader->AddVariable("Lepton_pt[0]", 'F');
   dataloader->AddVariable("Lepton_pt[1]", 'F');
   dataloader->AddVariable("detajj",       'F');
+  dataloader->AddVariable("detajjl:=detajjl(CleanJet_pt[0],CleanJet_eta[0],CleanJet_phi[0],CleanJet_pt[1],CleanJet_eta[1],CleanJet_phi[1],Lepton_pt[0],Lepton_eta[0],Lepton_phi[0])", 'F');
 
 
   // Input files
@@ -113,25 +132,22 @@ void TMVAClassification_VH2j(TString myMethodList = "")
   TCut mycuts;
   TCut mycutb;
 
-  mycuts = "mll > 12 \
+  mycuts = "MET_pt > 20 \
             && Lepton_pt[0] > 25 \
             && Lepton_pt[1] > 10 \
-            && (abs(Lepton_pdgId[1]) == 13 || Lepton_pt[1] > 13) \
-            && nLepton >= 2 \
             && Alt$(Lepton_pt[2],0) < 10 \
-            && ptll > 30 \
-            && MET_pt > 20 \
+            && (abs(Lepton_pdgId[1]) == 13 || Lepton_pt[1] > 13) \
             && Lepton_pdgId[0]*Lepton_pdgId[1] == -11*13 \
-            && Sum$(CleanJet_pt > 30) >= 2 \
-            && abs(CleanJet_eta[0]) < 2.5 \
-            && abs(CleanJet_eta[1]) < 2.5 \
-            && mth > 60 \
-            && mth < 125 \
+            && mll > 12 \
+            && ptll > 30 \
             && drll < 2 \
+            && Sum$(CleanJet_pt > 30) >= 2 \
+            && Alt$(abs(CleanJet_eta[0]),0) < 2.5 \
+            && Alt$(abs(CleanJet_eta[1]),0) < 2.5 \
             && Sum$(CleanJet_pt > 20 && Jet_btagDeepB[CleanJet_jetIdx] > 0.1522) == 0 \
             && mjj < 200 \
             && abs(detajj) < 3.5 \
-            ";
+            && (mth > 60 && mth < 125)";
 
   mycutb = mycuts;
 
@@ -149,17 +165,17 @@ void TMVAClassification_VH2j(TString myMethodList = "")
     dataloader->AddBackgroundTree(tmpbTree, tmpWeight);
   }
 
-  //dataloader->SetSignalWeightExpression    ("XSWeight*GenLepMatch2l*SFweight2l*bPogSF_CMVAL*LepCut2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*LepSF2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*METFilter_MC");
-  //dataloader->SetBackgroundWeightExpression("XSWeight*GenLepMatch2l*SFweight2l*bPogSF_CMVAL*LepCut2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*LepSF2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*METFilter_MC");
+//dataloader->SetSignalWeightExpression    ("XSWeight*GenLepMatch2l*SFweight2l*bPogSF_CMVAL*LepCut2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*LepSF2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*METFilter_MC");
+//dataloader->SetBackgroundWeightExpression("XSWeight*GenLepMatch2l*SFweight2l*bPogSF_CMVAL*LepCut2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*LepSF2l__ele_mva_90p_Iso2016__mu_cut_Tight80x*METFilter_MC");
   dataloader->SetSignalWeightExpression    ("XSWeight");
   dataloader->SetBackgroundWeightExpression("XSWeight");
 
 
   // Tell the dataloader to use all remaining events in the trees after training for testing
-  //  dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=0:nTrain_Background=0:SplitMode=Random::SplitSeed=10:NormMode=None:!V");
-  //  dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=2404:nTrain_Background=11671:SplitMode=Block::SplitSeed=10:NormMode=EqualNumEvents");
-  //  dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Alternate::SplitSeed=10:NormMode=EqualNumEvents");
-  //  dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Random:NormMode=NumEvents:!V");
+//dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=0:nTrain_Background=0:SplitMode=Random::SplitSeed=10:NormMode=None:!V");
+//dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=2404:nTrain_Background=11671:SplitMode=Block::SplitSeed=10:NormMode=EqualNumEvents");
+//dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Alternate::SplitSeed=10:NormMode=EqualNumEvents");
+//dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Random:NormMode=NumEvents:!V");
   dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Random::SplitSeed=10:NormMode=EqualNumEvents");
 
 

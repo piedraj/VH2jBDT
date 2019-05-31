@@ -170,8 +170,6 @@ void TMVAClassification_VH2j(TString myMethodList = "")
   dataloader->SetSignalWeightExpression    ("XSWeight");
   dataloader->SetBackgroundWeightExpression("XSWeight");
 
-
-  // Tell the dataloader to use all remaining events in the trees after training for testing
 //dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=0:nTrain_Background=0:SplitMode=Random::SplitSeed=10:NormMode=None:!V");
 //dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "nTrain_Signal=2404:nTrain_Background=11671:SplitMode=Block::SplitSeed=10:NormMode=EqualNumEvents");
 //dataloader->PrepareTrainingAndTestTree(mycuts, mycutb, "SplitMode=Alternate::SplitSeed=10:NormMode=EqualNumEvents");
@@ -207,7 +205,9 @@ void TMVAClassification_VH2j(TString myMethodList = "")
 
   delete factory;
   delete dataloader;
+
   
   // Launch the GUI for the root macros
+  //----------------------------------------------------------------------------
   if (!gROOT->IsBatch()) TMVA::TMVAGui(outfileName);
 }

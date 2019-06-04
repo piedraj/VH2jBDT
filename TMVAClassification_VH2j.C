@@ -26,19 +26,24 @@
 #include "TMVA/Tools.h"
 
 
-float detajjl(float jet1_pt, float jet1_eta, float jet1_phi,
-	      float jet2_pt, float jet2_eta, float jet2_phi,
-	      float lep1_pt, float lep1_eta, float lep1_phi)
+float mindetajl(float jet1_eta,
+		float jet2_eta,
+		float lep1_eta,
+		float lep2_eta)
 {
-  TLorentzVector jet1_tlv;
-  TLorentzVector jet2_tlv;
-  TLorentzVector lep1_tlv;
+  float themin = 999;
 
-  jet1_tlv.SetPtEtaPhiM(jet1_pt, jet1_eta, jet1_phi, 0.);
-  jet2_tlv.SetPtEtaPhiM(jet2_pt, jet2_eta, jet2_phi, 0.);
-  lep1_tlv.SetPtEtaPhiM(lep1_pt, lep1_eta, lep1_phi, 0.);
+  float detaj1l1 = fabs(jet1_eta - lep1_eta);
+  float detaj1l2 = fabs(jet1_eta - lep2_eta);
+  float detaj2l1 = fabs(jet2_eta - lep1_eta);
+  float detaj2l2 = fabs(jet2_eta - lep2_eta);
 
-  return fabs((jet1_tlv + jet2_tlv).Eta() - lep1_tlv.Eta());
+  if (detaj1l1 < themin) themin = detaj1l1;
+  if (detaj1l2 < themin) themin = detaj1l2;
+  if (detaj2l1 < themin) themin = detaj2l1;
+  if (detaj2l2 < themin) themin = detaj2l2;
+
+  return themin;
 }
 
 
@@ -105,7 +110,7 @@ void TMVAClassification_VH2j(TString myMethodList = "")
   dataloader->AddVariable("Lepton_pt[0]", 'F');
   dataloader->AddVariable("Lepton_pt[1]", 'F');
   dataloader->AddVariable("detajj",       'F');
-  dataloader->AddVariable("detajjl:=detajjl(CleanJet_pt[0],CleanJet_eta[0],CleanJet_phi[0],CleanJet_pt[1],CleanJet_eta[1],CleanJet_phi[1],Lepton_pt[0],Lepton_eta[0],Lepton_phi[0])", 'F');
+  dataloader->AddVariable("mindetajl:=mindetajl(CleanJet_eta[0],CleanJet_eta[1],Lepton_eta[0],Lepton_eta[1])", 'F');
 
 
   // Input files

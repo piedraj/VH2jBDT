@@ -2,7 +2,9 @@
 
 The goal of this multivariate analysis effort is to better separate VH2j from ggH. We have chosen the Boosted Decision Trees (BDT) method as classifier. This code is being developed in `CMSSW_9_4_9`. Downloading the code is easy.
 
-    git clone https://github.com/piedraj/VH2j
+    git clone https://github.com/piedraj/VH2jBDT
+
+    cd VH2jBDT
 
 The first part has to do with the training and testing of the BDT. The following macro does the job with a given set of variables and BDT configuration. This is the place to play with both the input variables and also the BDT configuration.
 

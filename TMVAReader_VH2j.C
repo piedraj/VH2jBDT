@@ -91,7 +91,7 @@ void init_TMVAReader_VH2j(TTree* tree)
 
 
 // Main function
-float TMVAReader_VH2j(int entry, int nclass)
+float TMVAReader_VH2j(int entry)
 {
   if (name_temp != multidraw::currentTree->GetCurrentFile()->GetName()) {
 
@@ -127,7 +127,7 @@ float TMVAReader_VH2j(int entry, int nclass)
   loc_Lepton_pt1 = loc0_Lepton_pt[1];
   loc_mindetajl  = mindetajl(loc0_CleanJet_eta[0],loc0_CleanJet_eta[1],loc0_Lepton_eta[0],loc0_Lepton_eta[1]);
 	
-  float classifier = myreader->EvaluateMulticlass(nclass, "BDT");
+  float classifier = myreader->EvaluateMVA("BDT");
 
   if (debug) std::cout << " classifier " << classifier << std::endl;
 

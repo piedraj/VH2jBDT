@@ -1,7 +1,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-//  root -l TMVAClassification_VH2j.C\(\"BDT\"\)
-//  root -l TMVAClassification_VH2j.C\(\"BDT,BDT4,BDT6,BDT12\"\)
+//  root -l VH2j_TMVAClassification.C\(\"BDT\"\)
+//  root -l VH2j_TMVAClassification.C\(\"BDT,BDT4,BDT6,BDT12\"\)
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -47,7 +47,7 @@ float mindetajl(float jet1_eta,
 }
 
 
-void TMVAClassification_VH2j(TString myMethodList = "") 
+void VH2j_TMVAClassification(TString myMethodList = "") 
 {
   // Load the library
   TMVA::Tools::Instance();
@@ -90,14 +90,14 @@ void TMVAClassification_VH2j(TString myMethodList = "")
   //----------------------------------------------------------------------------
   TString workdir = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Fall2017_nAOD_v1_Full2017v2/MCl1loose2017v2__MCCorr2017__btagPerEvent__l2loose__l2tightOR2017";
 
-  TString outfileName("VH2j_TMVA.root");
+  TString outfileName("VH2j_TMVAClassification.root");
 
   TFile* outputFile = TFile::Open(outfileName, "recreate");
 
 
   // Create the factory object. The first argument is the base of the name of all the weight files
   //----------------------------------------------------------------------------
-  TString factoryName("TMVAClassification_VH2j");
+  TString factoryName("VH2j_TMVAClassification");
 
   TMVA::Factory* factory = new TMVA::Factory(factoryName, outputFile,
 					     "!V:!Silent:Color:DrawProgressBar:AnalysisType=Classification");

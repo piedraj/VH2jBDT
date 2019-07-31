@@ -1,6 +1,6 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-//  root -l TMVAReader_VH2j.C
+//  root -l VH2j_TMVAReader.C
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,7 +67,7 @@ float mindetajl(float jet1_eta,
 
 
 // Init
-void init_TMVAReader_VH2j(TTree* tree)
+void init_VH2j_TMVAReader(TTree* tree)
 {
   tree->SetBranchAddress("mll",          &loc0_mll);
   tree->SetBranchAddress("mjj",          &loc0_mjj);
@@ -77,7 +77,7 @@ void init_TMVAReader_VH2j(TTree* tree)
   tree->SetBranchAddress("Lepton_eta",   &loc0_Lepton_eta);
   tree->SetBranchAddress("CleanJet_eta", &loc0_CleanJet_eta);
 
-  // The variables' names and their order have to agree with those in TMVAClassification_VH2j.C
+  // The variables' names and their order have to agree with those in VH2j_TMVAClassification.C
   myreader->AddVariable("mll",          &loc_mll);
   myreader->AddVariable("mjj",          &loc_mjj);
   myreader->AddVariable("mth",          &loc_mth);
@@ -86,12 +86,12 @@ void init_TMVAReader_VH2j(TTree* tree)
   myreader->AddVariable("detajj",       &loc_detajj);
   myreader->AddVariable("mindetajl(CleanJet_eta[0],CleanJet_eta[1],Lepton_eta[0],Lepton_eta[1])", &loc_mindetajl);
                 
-  myreader->BookMVA("BDT", "/afs/cern.ch/user/p/piedra/work/CMSSW_projects/CMSSW_9_4_9/src/PlotsConfigurations/Configurations/VH2j/Full2017/VH2jBDT/dataset/weights/TMVAClassification_VH2j_BDT.weights.xml");
+  myreader->BookMVA("BDT", "/afs/cern.ch/user/p/piedra/work/VH2jBDT/dataset/weights/VH2j_TMVAClassification_BDT.weights.xml");
 }
 
 
 // Main function
-float TMVAReader_VH2j(int entry)
+float VH2j_TMVAReader(int entry)
 {
   if (name_temp != multidraw::currentTree->GetCurrentFile()->GetName()) {
 
@@ -110,7 +110,7 @@ float TMVAReader_VH2j(int entry)
 
     myreader = new TMVA::Reader();
 
-    init_TMVAReader_VH2j(multidraw::currentTree);
+    init_VH2j_TMVAReader(multidraw::currentTree);
 
     std::cout << " check init" << std::endl;	
 

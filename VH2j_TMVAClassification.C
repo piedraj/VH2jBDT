@@ -88,7 +88,7 @@ void VH2j_TMVAClassification(TString myMethodList = "")
 
   // Output file
   //----------------------------------------------------------------------------
-  TString workdir = "/eos/cms/store/group/phys_higgs/cmshww/amassiro/HWWNano/Fall2017_nAOD_v1_Full2017v2/MCl1loose2017v2__MCCorr2017__btagPerEvent__l2loose__l2tightOR2017";
+  TString workdir = "/afs/cern.ch/user/y/yiiyama/public/hwwvirtual/Summer16/l2tightOR";
 
   TString outfileName("VH2j_TMVAClassification.root");
 
@@ -121,12 +121,12 @@ void VH2j_TMVAClassification(TString myMethodList = "")
   InputFiles_signal.clear();
   InputFiles_background.clear();
 
-  for (UInt_t k=0; k<50; k++) {
+  for (UInt_t k=0; k<4; k++) {
 
-    if (k < 20) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HZJ_HToWW_M120__part%d.root",      workdir.Data(), k)));  // Use M125 when available
-    if (k < 19) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_GluGluZH_HToWW_M125__part%d.root", workdir.Data(), k)));
-    if (k < 21) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWplusJ_HToWW_M125__part%d.root",  workdir.Data(), k)));
-    if (k < 29) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWminusJ_HToWW_M125__part%d.root", workdir.Data(), k)));
+    if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HZJ_HToWW_M125__part%d.root",      workdir.Data(), k)));
+  //if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_GluGluZH_HToWW_M125__part%d.root", workdir.Data(), k)));  // Not available in current workdir
+    if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWplusJ_HToWW_M125__part%d.root",  workdir.Data(), k)));
+    if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWminusJ_HToWW_M125__part%d.root", workdir.Data(), k)));
 
     InputFiles_background.push_back(TFile::Open(Form("%s/nanoLatino_GluGluHToWWTo2L2NuPowheg_M125__part%d.root", workdir.Data(), k)));
   }

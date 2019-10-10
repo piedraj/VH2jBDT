@@ -15,7 +15,7 @@ To read the output of the BDT the macro `VH2j_TMVAReader.C` has to be modified, 
          'range' : (20,-1.,1.),
          'xaxis' : 'BDT discriminant VH2j',
          'fold' : 3,
-         'linesToAdd' : ['.L /afs/cern.ch/user/p/piedra/work/CMSSW_projects/CMSSW_9_4_9/src/PlotsConfigurations/Configurations/VH2j/Full2017/VH2jBDT/VH2j_TMVAReader.C+']
+         'linesToAdd' : ['.L /afs/cern.ch/user/p/piedra/work/VH2jBDT/VH2j_TMVAReader.C+']
     }
 
 # VH2j MultiClass

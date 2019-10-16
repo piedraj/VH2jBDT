@@ -26,25 +26,8 @@
 #include "TMVA/Tools.h"
 
 
-float mindetajl(float jet1_eta,
-		float jet2_eta,
-		float lep1_eta,
-		float lep2_eta)
-{
-  float themin = 999;
-
-  float detaj1l1 = fabs(jet1_eta - lep1_eta);
-  float detaj1l2 = fabs(jet1_eta - lep2_eta);
-  float detaj2l1 = fabs(jet2_eta - lep1_eta);
-  float detaj2l2 = fabs(jet2_eta - lep2_eta);
-
-  if (detaj1l1 < themin) themin = detaj1l1;
-  if (detaj1l2 < themin) themin = detaj1l2;
-  if (detaj2l1 < themin) themin = detaj2l1;
-  if (detaj2l2 < themin) themin = detaj2l2;
-
-  return themin;
-}
+// User defined function
+#include "/afs/cern.ch/user/p/piedra/work/CMSSW_projects/CMSSW_10_2_15_patch2/src/PlotsConfigurations/Configurations/VH2j/Full2016_nanoAODv4/detaljmin.C"
 
 
 void VH2j_TMVAClassification(TString myMethodList = "") 
@@ -86,7 +69,7 @@ void VH2j_TMVAClassification(TString myMethodList = "")
   }
 
 
-  // Output file
+  // Input and output files
   //----------------------------------------------------------------------------
   TString workdir = "/afs/cern.ch/user/y/yiiyama/public/hwwvirtual/Summer16/l2tightOR";
 
@@ -110,7 +93,7 @@ void VH2j_TMVAClassification(TString myMethodList = "")
   dataloader->AddVariable("Lepton_pt[0]", 'F');
   dataloader->AddVariable("Lepton_pt[1]", 'F');
   dataloader->AddVariable("detajj",       'F');
-  dataloader->AddVariable("mindetajl:=mindetajl(CleanJet_eta[0],CleanJet_eta[1],Lepton_eta[0],Lepton_eta[1])", 'F');
+  dataloader->AddVariable("detaljmin:=detaljmin(Lepton_eta[0],Lepton_eta[1],CleanJet_eta[0],CleanJet_eta[1])", 'F');
 
 
   // Input files

@@ -31,7 +31,7 @@ float loc_mth;
 float loc_detajj;
 float loc_Lepton_pt0;
 float loc_Lepton_pt1;
-float loc_mindetajl;
+float loc_detaljmin;
 
 
 // Variables read from the tree
@@ -45,25 +45,7 @@ float loc0_CleanJet_eta[100];
 
 
 // User defined function
-float mindetajl(float jet1_eta,
-		float jet2_eta,
-		float lep1_eta,
-		float lep2_eta)
-{
-  float themin = 999;
-
-  float detaj1l1 = fabs(jet1_eta - lep1_eta);
-  float detaj1l2 = fabs(jet1_eta - lep2_eta);
-  float detaj2l1 = fabs(jet2_eta - lep1_eta);
-  float detaj2l2 = fabs(jet2_eta - lep2_eta);
-
-  if (detaj1l1 < themin) themin = detaj1l1;
-  if (detaj1l2 < themin) themin = detaj1l2;
-  if (detaj2l1 < themin) themin = detaj2l1;
-  if (detaj2l2 < themin) themin = detaj2l2;
-
-  return themin;
-}
+#include "/afs/cern.ch/user/p/piedra/work/CMSSW_projects/CMSSW_10_2_15_patch2/src/PlotsConfigurations/Configurations/VH2j/Full2016_nanoAODv4/detaljmin.C"
 
 
 // Init
@@ -84,7 +66,7 @@ void init_VH2j_TMVAReader(TTree* tree)
   myreader->AddVariable("Lepton_pt[0]", &loc_Lepton_pt0);
   myreader->AddVariable("Lepton_pt[1]", &loc_Lepton_pt1);
   myreader->AddVariable("detajj",       &loc_detajj);
-  myreader->AddVariable("mindetajl(CleanJet_eta[0],CleanJet_eta[1],Lepton_eta[0],Lepton_eta[1])", &loc_mindetajl);
+  myreader->AddVariable("detaljmin(Lepton_eta[0],Lepton_eta[1],CleanJet_eta[0],CleanJet_eta[1])", &loc_detaljmin);
                 
   myreader->BookMVA("BDT", "/afs/cern.ch/user/p/piedra/work/VH2jBDT/dataset/weights/VH2j_TMVAClassification_BDT.weights.xml");
 }
@@ -125,7 +107,7 @@ float VH2j_TMVAReader(int entry)
   loc_detajj     = loc0_detajj;
   loc_Lepton_pt0 = loc0_Lepton_pt[0];
   loc_Lepton_pt1 = loc0_Lepton_pt[1];
-  loc_mindetajl  = mindetajl(loc0_CleanJet_eta[0],loc0_CleanJet_eta[1],loc0_Lepton_eta[0],loc0_Lepton_eta[1]);
+  loc_detaljmin  = detaljmin(loc0_Lepton_eta[0],loc0_Lepton_eta[1],loc0_CleanJet_eta[0],loc0_CleanJet_eta[1]);
 	
   float classifier = myreader->EvaluateMVA("BDT");
 

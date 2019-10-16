@@ -107,11 +107,11 @@ void VH2j_TMVAClassification(TString myMethodList = "")
   for (UInt_t k=0; k<4; k++) {
 
     if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HZJ_HToWW_M125__part%d.root",      workdir.Data(), k)));
-  //if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_GluGluZH_HToWW_M125__part%d.root", workdir.Data(), k)));  // Not available in current workdir
+    if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_ggZH_HToWW_M125__part%d.root",     workdir.Data(), k)));
     if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWplusJ_HToWW_M125__part%d.root",  workdir.Data(), k)));
     if (k < 1) InputFiles_signal.push_back(TFile::Open(Form("%s/nanoLatino_HWminusJ_HToWW_M125__part%d.root", workdir.Data(), k)));
 
-    InputFiles_background.push_back(TFile::Open(Form("%s/nanoLatino_GluGluHToWWTo2L2NuPowheg_M125__part%d.root", workdir.Data(), k)));
+    if (k < 4) InputFiles_background.push_back(TFile::Open(Form("%s/nanoLatino_GluGluHToWWTo2L2NuPowheg_M125__part%d.root", workdir.Data(), k)));
   }
 
 
